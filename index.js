@@ -51,6 +51,32 @@ async function run() {
       res.send(result);
     });
 
+    // update user's added service
+    app.put("/service/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedService = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+
+      const service = {
+        $set: {
+          serviceImage: updatedService.serviceImage,
+          serviceName: updatedService.serviceName,
+          price: updatedService.price,
+          description: updatedService.description,
+          serviceArea: updatedService.serviceArea,
+        },
+      };
+
+      const result = await servicesCollection.updateOne(
+        filter,
+        service,
+        options
+      );
+      res.send(result);
+    });
+
     // get service data from database filtered by email
     app.get("/usersService", async (req, res) => {
       // console.log(req.query.email);
