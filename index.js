@@ -77,6 +77,14 @@ async function run() {
       res.send(result);
     });
 
+    // delete user's added service
+    app.delete("/service/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await servicesCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // get service data from database filtered by email
     app.get("/usersService", async (req, res) => {
       // console.log(req.query.email);
