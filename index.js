@@ -27,6 +27,7 @@ async function run() {
     // await client.connect();
 
     const servicesCollection = client.db("bugShieldDB").collection("services");
+    const bookingsCollection = client.db("bugShieldDB").collection("bookings");
 
     // get all data from services collection
     app.get("/services", async (req, res) => {
@@ -94,6 +95,15 @@ async function run() {
         query = { serviceProviderEmail: req.query.email };
       }
       const result = await servicesCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // booking related apis
+    // create booking
+    app.post("/booking", async (req, res) => {
+      const newBooking = req.body;
+
+      const result = await bookingsCollection.insertOne(newBooking);
       res.send(result);
     });
 
