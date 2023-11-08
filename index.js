@@ -43,6 +43,15 @@ async function run() {
       res.send(result);
     });
 
+    // create service
+    app.post("/service", async (req, res) => {
+      const newService = req.body;
+      console.log(newService);
+
+      const result = await servicesCollection.insertOne(newService);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
