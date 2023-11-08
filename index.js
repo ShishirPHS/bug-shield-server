@@ -46,9 +46,20 @@ async function run() {
     // create service
     app.post("/service", async (req, res) => {
       const newService = req.body;
-      console.log(newService);
 
       const result = await servicesCollection.insertOne(newService);
+      res.send(result);
+    });
+
+    // get service data from database filtered by email
+    app.get("/usersService", async (req, res) => {
+      // console.log(req.query.email);
+
+      let query = {};
+      if (req.query?.email) {
+        query = { serviceProviderEmail: req.query.email };
+      }
+      const result = await servicesCollection.find(query).toArray();
       res.send(result);
     });
 
