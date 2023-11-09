@@ -36,6 +36,7 @@ async function run() {
     const bookingsCollection = client.db("bugShieldDB").collection("bookings");
 
     // auth related api
+    // create cookie
     app.post("/jwt", async (req, res) => {
       const user = req.body;
       console.log("user for token: ", user);
@@ -48,6 +49,19 @@ async function run() {
           httpOnly: true,
           secure: true,
           sameSite: "none",
+        })
+        .send({ success: true });
+    });
+
+    // clear cookie
+    app.post("/logOut", async (req, res) => {
+      const user = req.body;
+      console.log("logging user: ", user);
+      res
+        .clearCookie("token", {
+          maxAge: 0,
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         })
         .send({ success: true });
     });
