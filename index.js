@@ -41,23 +41,23 @@ const logger = (req, res, next) => {
   next();
 };
 
-const verifyToken = (req, res, next) => {
-  const token = req?.cookies?.token;
-  console.log("token in the middleware: ", token);
+// const verifyToken = (req, res, next) => {
+//   const token = req?.cookies?.token;
+//   console.log("token in the middleware: ", token);
 
-  // no token available
-  if (!token) {
-    return res.status(401).send({ message: "unauthorized access" });
-  }
+//   // no token available
+//   if (!token) {
+//     return res.status(401).send({ message: "unauthorized access" });
+//   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).send({ message: "unauthorized access" });
-    }
-    req.user = decoded;
-    next();
-  });
-};
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+//     if (err) {
+//       return res.status(401).send({ message: "unauthorized access" });
+//     }
+//     req.user = decoded;
+//     next();
+//   });
+// };
 
 async function run() {
   try {
@@ -107,7 +107,7 @@ async function run() {
     });
 
     // get particular data from database
-    app.get("/services/:id", logger, verifyToken, async (req, res) => {
+    app.get("/services/:id", logger, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await servicesCollection.findOne(query);
@@ -157,7 +157,7 @@ async function run() {
     });
 
     // get service data from database filtered by email
-    app.get("/usersService", logger, verifyToken, async (req, res) => {
+    app.get("/usersService", logger, async (req, res) => {
       // console.log(req.query.email);
 
       let query = {};
